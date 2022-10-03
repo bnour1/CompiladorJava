@@ -93,18 +93,28 @@ public class Lexico {
                             c == ';'){
                         lexema.append(c);
                         estado = 5;
-                    }else if( c == '+' ||
-                              c == '-' ||
-                              c == '*' ||
-                              c == '/' ||
-                              c == '%' ){
+                    }
+                    else if( c == '+' ||
+                             c == '-' ||
+                             c == '*' ||
+                             c == '/' ||
+                             c == '%' ){
                         lexema.append(c);
                         estado = 6;
-                        }else if(c == '$'){
+                    }
+                    else if (c == '=') {
+                        lexema.append(c);
+                        estado = 10;
+                    } else if (c == '<' || c == '>' || c == '!') {
+                        lexema.append(c);
+                        estado = 11;
+                    }
+                    else if(c == '$'){
                         lexema.append(c);
                         estado = 99;
                         this.back();
-                    }else{
+                    }
+                    else{
                         lexema.append(c);
                         throw new RuntimeException("Erro: token inválido \"" + lexema.toString() + "\"");
                     }
@@ -163,6 +173,48 @@ public class Lexico {
                         lexema.append(c);
                         estado = 1;
                         break;
+                    }
+                case 10:
+                    if (c == '=') {
+                        lexema.append(c);
+                        if ("==".contentEquals(lexema.toString())) {
+                            estado = 0;
+                            return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL);
+                        } else {
+                            estado = 10;
+                        }
+                    } else if (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
+                        this.back();
+                        return new Token(lexema.toString(), Token.TIPO_OPERADOR_ATRIBUICAO);
+                    } else {
+                        lexema.append(c);
+                        throw new RuntimeException("Erro: operador incorreto \"" + lexema.toString() + "\"");
+                    }
+                    break;
+                case 11:
+                    if (c == '=') {
+                        lexema.append(c);
+                        if ("<=".contentEquals(lexema.toString()) ||
+                                ">=".contentEquals(lexema.toString()) ||
+                                "<>".contentEquals(lexema.toString())) {
+                            estado = 0;
+                            return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL);
+                        } else {
+                            throw new RuntimeException(
+                                    "Erro: operador relacional incorreto \"" + lexema.toString() + "\"");
+                        }
+                    } else if ("<".contentEquals(lexema.toString()) ||
+                            ">".contentEquals(lexema.toString()) ||
+                            "<=".contentEquals(lexema.toString()) ||
+                            ">=".contentEquals(lexema.toString()) ||
+                            "<>".contentEquals(lexema.toString())) {
+                        this.back();
+                        return new Token(lexema.toString(), Token.TIPO_OPERADOR_RELACIONAL);
+                    } else if (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
+                        this.back();
+                        return new Token(lexema.toString(), Token.TIPO_OPERADOR_ATRIBUICAO);
+                    } else {
+                        throw new RuntimeException("Erro: operador relacional incorreto \"" + lexema.toString() + "\"");
                     }
                 case 99:
                     return new Token(lexema.toString(), Token.TIPO_FIM_CODIGO); 
