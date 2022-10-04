@@ -160,7 +160,7 @@ public class Lexico {
 						lexema.append(c);
 						estado = 4;
 					} else {
-						lexema.append(c);
+						this.back();
 						throw new RuntimeException(
 								"Erro: número float está com formato inválido \"" + lexema.toString() + "\"");
 					}
@@ -187,9 +187,12 @@ public class Lexico {
 					}
 					break;
 				case 7:
+					lexema.append(c);
 					if (this.isChar(c)) {
-						lexema.append(c);
 						estado = 8;
+					} else {
+						throw new RuntimeException(
+								"Erro: formato de char inválido \"" + lexema.toString() + "\"");
 					}
 					break;
 				case 8:
@@ -198,7 +201,7 @@ public class Lexico {
 						estado = 9;
 						return new Token(lexema.toString(), Token.TIPO_CHAR);
 					} else {
-						lexema.append(c);
+						this.back();
 						throw new RuntimeException(
 								"Erro: char está com formado incorreto \"" + lexema.toString() + "\"");
 					}
