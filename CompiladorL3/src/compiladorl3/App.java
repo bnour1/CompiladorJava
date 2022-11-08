@@ -17,6 +17,7 @@ public class App {
     public static void main(String[] args) {
         // TODO code application logic here
         Lexico lexico = new Lexico("/workspace/attcomp/CompiladorL3/src/compiladorl3/codigo.txt");
+        Sintatico sintatico = new Sintatico(lexico);
         Token t = null;
         while ((t = lexico.nextToken()) != null) {
             System.out.println(t.toString());
