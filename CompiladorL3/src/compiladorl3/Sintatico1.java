@@ -22,42 +22,111 @@ public class Sintatico1 {
     // programa
     private void P() {
         if (!this.token.getLexema().equals("int")) {
-            throw new RuntimeErrorException(null);
+            throw new RuntimeException("oops, erro de sintaxe no cabeçalho do programa");
         } else {
             this.token = this.lexico.nextToken();
         }
 
         if (!this.token.getLexema().equals("main")) {
-            throw new RuntimeErrorException(null);
+            throw new RuntimeException("oops, erro de sintaxe no cabeçalho do programa");
         } else {
             this.token = this.lexico.nextToken();
         }
 
         if (!this.token.getLexema().equals("(")) {
-            throw new RuntimeErrorException(null);
+            throw new RuntimeException("oops, faltou o '()' no cabeçalho após 'main'");
         } else {
             this.token = this.lexico.nextToken();
         }
 
         if (!this.token.getLexema().equals(")")) {
-            throw new RuntimeErrorException(null);
+            throw new RuntimeException("oops, esqueceu de fechar o ) antes de "+token.getLexema());
         } else {
             this.token = this.lexico.nextToken();
-            C();
+            B();
         }
     }
 
     // bloco
-    private void C() {
+    private void B() {
         if (!this.token.getLexema().equals("{")) {
-            throw new RuntimeException("Oxe, o programa devia ta dentro de um bloco" + this.token.getLexema());
+            throw new RuntimeException("Oxe, esqueceu de iniciar o bloco com '{'? antes de " + this.token.getLexema());
         } else {
             this.token = this.lexico.nextToken();
-            this.E();
+            this.B1();
         }
-        if (!this.token.getLexema().equals("}")) {
-            throw new RuntimeException("Oxe, era pra ter fechado a chave" + this.token.getLexema());
+        
+    }
+
+    private void B1(){
+        if (this.token.getLexema().equals("}")) {
+            this.token = lexico.nextToken();
+            return;
         } else {
+            this.V();
+            this.K();
+            this.B1();
+        }
+    }
+
+    //declaração de variavel
+    private void V(){
+        if(!(this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)){
+            return;
+        }else{
+            if(!(this.token.getLexema().equals("int") || 
+            this.token.getLexema().equals("char") ||
+            this.token.getLexema().equals("float"))){
+                return;
+            }else{
+                Token temp = this.token;
+                this.token = lexico.nextToken();
+                if(!(this.token.getTipo() == Token.TIPO_IDENTIFICADOR)){
+                    throw new RuntimeException("Oops, era pra ter um indentificador depois de '" +temp.getLexema()+"'");
+                }else{
+                    temp = this.token;
+                    this.token = lexico.nextToken();
+                    if(!this.token.getLexema().equals(";")){
+                        throw new RuntimeException("Oops, faltou o ';' para finalizar a linha depois de '" +temp.getLexema()+"'");
+                    }else{
+                        this.token = lexico.nextToken();
+                    }
+                }
+            }
+        }
+    }
+
+    private void K(){
+        KB();
+    }
+
+    private void KB(){
+        AT();
+        if(this.token.getLexema().equals("{")){
+            this.token = this.lexico.nextToken();
+            B1(); 
+        }
+    }
+
+    private void AT(){
+        if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)){
+            this.token = this.lexico.nextToken();
+            if(this.token.getLexema().equals("=")){
+                this.token = this.lexico.nextToken();
+                AT1();
+            }else{
+                return;
+            }
+        }else{
+            return;
+        }
+    }
+
+    private void AT1(){
+        this.E();
+        if(!(this.token.getLexema().equals(";"))){
+            throw new RuntimeException("Oops, era pra ter finalizado a linha com ';' antes de inserir "+token.getLexema());
+        }else{
             this.token = this.lexico.nextToken();
         }
     }
