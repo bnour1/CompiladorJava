@@ -28,6 +28,12 @@ public class Lexico {
 		}
 	}
 
+	// lookahead, retorna proximo chat após o token
+	public char lookahead(){
+		int i = this.indiceConteudo;
+		return this.conteudo[i+1];
+	}
+
 	// Retorna próximo char
 	private char nextChar() {
 		return this.conteudo[this.indiceConteudo++];
@@ -218,7 +224,8 @@ public class Lexico {
 					back();
 					return new Token(lexema.toString(), Token.TIPO_OPERADOR_ARITMETICO);
 				case 12:
-					if (c == ' ' || c == '\t' || c == '\n' || c == '\r') {
+					if (c == ' ' || c == '\t' || c == '\n' || c == '\r' || this.isCharacterSpecial(c) ) {
+						this.back();
 						return new Token(lexema.toString(), Token.TIPO_PALAVRA_RESERVADA);
 					} else {
 						lexema.append(c);
