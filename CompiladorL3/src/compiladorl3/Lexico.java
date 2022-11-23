@@ -1,19 +1,14 @@
 package compiladorl3;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
- * @author tarci
+ * @author Equipe: Do Prata ao Global
  */
 public class Lexico {
+
 	private char[] conteudo;
 	private int indiceConteudo;
 
@@ -29,7 +24,7 @@ public class Lexico {
 	}
 
 	// lookahead, retorna proximo chat após o token
-	public char lookahead(){
+	public char lookahead() {
 		int i = this.indiceConteudo;
 		return this.conteudo[i+1];
 	}

@@ -1,4 +1,9 @@
-int main(){
-ident + n2 * 3 + 5.5 - 100.3
+public main() {
+    int a;
+    int b;
+    float c;
+    char d;
+    a = b + 10;
+    c = a * 25;
 }
 $

@@ -2,12 +2,12 @@ package compiladorl3;
 
 import javax.management.RuntimeErrorException;
 
-public class Sintatico {
+public class Sintatico1 {
 
     private Lexico lexico;
     private Token token;
 
-    public Sintatico(Lexico lexico) {
+    public Sintatico1(Lexico lexico) {
         this.lexico = lexico;
     }
 
