@@ -105,8 +105,33 @@ public class Sintatico1 {
         }
         else if(this.token.getLexema().equals("while")){
             IT();
+        }else if(this.token.getLexema().equals("if")){
+            CD();
         }
     }
+
+    private void CD(){
+        this.token = this.lexico.nextToken();
+        if(!this.token.getLexema().equals("(")){
+            throw new RuntimeException("Oops, faltou abrir o '('' após o if");
+        }else{
+            
+            CD1();
+        }
+    }
+
+    private void CD1(){
+        this.token = this.lexico.nextToken();
+        ER();
+        if(!this.token.getLexema().equals(")")){
+            throw new RuntimeException("Oops, faltou fechar o ')' após a expressão");
+        }else{
+            this.token = this.lexico.nextToken();
+            K();
+        }
+    }
+        
+    
 
     //comando basico
     private void KB(){
@@ -153,7 +178,12 @@ public class Sintatico1 {
 
     private void IT1(){
         this.token = this.lexico.nextToken();
-        ER();
+        try{
+            ER();
+        }catch(Exception E){
+            System.out.println("Faltou uma expressão aritimetica antes de fechar o ')'");
+        }
+        
         if(!this.token.getLexema().equals(")")){
             throw new RuntimeException("Precisa fechar o ')' após a expressão");
         }else{
