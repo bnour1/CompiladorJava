@@ -96,10 +96,17 @@ public class Sintatico1 {
         }
     }
 
+    //comando
     private void K(){
-        KB();
+        if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR || this.token.getLexema().equals("{"))){
+            KB();
+        }
+        else if(this.token.getLexema().equals("while")){
+            IT();
+        }
     }
 
+    //comando basico
     private void KB(){
         AT();
         if(this.token.getLexema().equals("{")){
@@ -108,6 +115,7 @@ public class Sintatico1 {
         }
     }
 
+    // Atribuição
     private void AT(){
         if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)){
             this.token = this.lexico.nextToken();
@@ -131,6 +139,29 @@ public class Sintatico1 {
         }
     }
 
+    //iteração
+    private void IT(){
+        this.token = this.lexico.nextToken();
+        if(this.token.getLexema().equals("(")){
+            IT1();
+        }else{
+            throw new RuntimeException("oops, era pra ter uma expressão relacional depois de 'while");
+        }
+    }
+
+    private void IT1(){
+        ER();
+    }
+
+    //expressão relacional
+    private void ER(){
+        E();
+        if(!(this.token.getTipo() == Token.TIPO_OPERADOR_RELACIONAL)){
+
+        }
+    }
+
+    //expressão aritimetica
     private void E() {
         this.T();
         this.E1();
