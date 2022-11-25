@@ -22,12 +22,14 @@ public class Sintatico1 {
     // programa
     private void P() {
         if (!this.token.getLexema().equals("int")) {
+            System.out.println(token.getLexema());
             throw new RuntimeException("oops, erro de sintaxe no cabeçalho do programa");
         } else {
             this.token = this.lexico.nextToken();
         }
 
         if (!this.token.getLexema().equals("main")) {
+            
             throw new RuntimeException("oops, erro de sintaxe no cabeçalho do programa");
         } else {
             this.token = this.lexico.nextToken();
@@ -150,14 +152,25 @@ public class Sintatico1 {
     }
 
     private void IT1(){
+        this.token = this.lexico.nextToken();
         ER();
+        if(!this.token.getLexema().equals(")")){
+            throw new RuntimeException("Precisa fechar o ')' após a expressão");
+        }else{
+            this.token = lexico.nextToken();
+            K();
+        }
+        
     }
 
     //expressão relacional
     private void ER(){
         E();
         if(!(this.token.getTipo() == Token.TIPO_OPERADOR_RELACIONAL)){
-
+            throw new RuntimeException("precisa inserir uma expressão relacional após o '");
+        }else{
+            this.token = this.lexico.nextToken();
+            E();
         }
     }
 

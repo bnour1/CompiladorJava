@@ -1,9 +1,16 @@
-public main () {
+int main () {
     int a;
     int b;
     float c;
     char d;
     a = b + 10;
     c = a * 25;
+    {
+        char d;
+    }
+
+    while(1+1 < 2+2){
+        char d;
+    }
 }
 $
