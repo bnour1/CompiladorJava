@@ -29,7 +29,7 @@ public class Sintatico1 {
         }
 
         if (!this.token.getLexema().equals("main")) {
-            
+
             throw new RuntimeException("oops, erro de sintaxe no cabeçalho do programa");
         } else {
             this.token = this.lexico.nextToken();
@@ -42,7 +42,7 @@ public class Sintatico1 {
         }
 
         if (!this.token.getLexema().equals(")")) {
-            throw new RuntimeException("oops, esqueceu de fechar o ) antes de "+token.getLexema());
+            throw new RuntimeException("oops, esqueceu de fechar o ) antes de " + token.getLexema());
         } else {
             this.token = this.lexico.nextToken();
             B();
@@ -57,10 +57,10 @@ public class Sintatico1 {
             this.token = this.lexico.nextToken();
             this.B1();
         }
-        
+
     }
 
-    private void B1(){
+    private void B1() {
         if (this.token.getLexema().equals("}")) {
             this.token = lexico.nextToken();
             return;
@@ -71,26 +71,28 @@ public class Sintatico1 {
         }
     }
 
-    //declaração de variavel
-    private void V(){
-        if(!(this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)){
+    // declaração de variavel
+    private void V() {
+        if (!(this.token.getTipo() == Token.TIPO_PALAVRA_RESERVADA)) {
             return;
-        }else{
-            if(!(this.token.getLexema().equals("int") || 
-            this.token.getLexema().equals("char") ||
-            this.token.getLexema().equals("float"))){
+        } else {
+            if (!(this.token.getLexema().equals("int") ||
+                    this.token.getLexema().equals("char") ||
+                    this.token.getLexema().equals("float"))) {
                 return;
-            }else{
+            } else {
                 Token temp = this.token;
                 this.token = lexico.nextToken();
-                if(!(this.token.getTipo() == Token.TIPO_IDENTIFICADOR)){
-                    throw new RuntimeException("Oops, era pra ter um indentificador depois de '" +temp.getLexema()+"'");
-                }else{
+                if (!(this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
+                    throw new RuntimeException(
+                            "Oops, era pra ter um indentificador depois de '" + temp.getLexema() + "'");
+                } else {
                     temp = this.token;
                     this.token = lexico.nextToken();
-                    if(!this.token.getLexema().equals(";")){
-                        throw new RuntimeException("Oops, faltou o ';' para finalizar a linha depois de '" +temp.getLexema()+"'");
-                    }else{
+                    if (!this.token.getLexema().equals(";")) {
+                        throw new RuntimeException(
+                                "Oops, faltou o ';' para finalizar a linha depois de '" + temp.getLexema() + "'");
+                    } else {
                         this.token = lexico.nextToken();
                     }
                 }
@@ -98,113 +100,111 @@ public class Sintatico1 {
         }
     }
 
-    //comando
-    private void K(){
-        if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR || this.token.getLexema().equals("{"))){
+    // comando
+    private void K() {
+        if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR || this.token.getLexema().equals("{"))) {
             KB();
-        }
-        else if(this.token.getLexema().equals("while")){
+        } else if (this.token.getLexema().equals("while")) {
             IT();
-        }else if(this.token.getLexema().equals("if")){
+        } else if (this.token.getLexema().equals("if")) {
             CD();
         }
     }
 
-    private void CD(){
+    // condicional
+    private void CD() {
         this.token = this.lexico.nextToken();
-        if(!this.token.getLexema().equals("(")){
+        if (!this.token.getLexema().equals("(")) {
             throw new RuntimeException("Oops, faltou abrir o '('' após o if");
-        }else{
-            
+        } else {
+
             CD1();
         }
     }
 
-    private void CD1(){
+    private void CD1() {
         this.token = this.lexico.nextToken();
         ER();
-        if(!this.token.getLexema().equals(")")){
+        if (!this.token.getLexema().equals(")")) {
             throw new RuntimeException("Oops, faltou fechar o ')' após a expressão");
-        }else{
+        } else {
             this.token = this.lexico.nextToken();
             K();
         }
     }
-        
-    
 
-    //comando basico
-    private void KB(){
+    // comando basico
+    private void KB() {
         AT();
-        if(this.token.getLexema().equals("{")){
+        if (this.token.getLexema().equals("{")) {
             this.token = this.lexico.nextToken();
-            B1(); 
+            B1();
         }
     }
 
     // Atribuição
-    private void AT(){
-        if((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)){
+    private void AT() {
+        if ((this.token.getTipo() == Token.TIPO_IDENTIFICADOR)) {
             this.token = this.lexico.nextToken();
-            if(this.token.getLexema().equals("=")){
+            if (this.token.getLexema().equals("=")) {
                 this.token = this.lexico.nextToken();
                 AT1();
-            }else{
-                return;
             }
-        }else{
-            return;
         }
     }
 
-    private void AT1(){
+    private void AT1() {
         this.E();
-        if(!(this.token.getLexema().equals(";"))){
-            throw new RuntimeException("Oops, era pra ter finalizado a linha com ';' antes de inserir "+token.getLexema());
-        }else{
+        if (!(this.token.getLexema().equals(";"))) {
+            throw new RuntimeException(
+                    "Oops, era pra ter finalizado a linha com ';' antes de inserir " + token.getLexema());
+        } else {
             this.token = this.lexico.nextToken();
         }
     }
 
-    //iteração
-    private void IT(){
+    // iteração
+    private void IT() {
         this.token = this.lexico.nextToken();
-        if(this.token.getLexema().equals("(")){
+        if (this.token.getLexema().equals("(")) {
             IT1();
-        }else{
+        } else {
             throw new RuntimeException("oops, era pra ter uma expressão relacional depois de 'while");
         }
     }
 
-    private void IT1(){
+    private void IT1() {
         this.token = this.lexico.nextToken();
-        try{
+        try {
             ER();
-        }catch(Exception E){
-            System.out.println("Faltou uma expressão aritimetica antes de fechar o ')'");
+        } catch (Exception E) {
+            System.out.println("Faltou uma expressão aritimetica antes de fechar o no while");
+            System.exit(0);
         }
-        
-        if(!this.token.getLexema().equals(")")){
+
+        if (!this.token.getLexema().equals(")")) {
             throw new RuntimeException("Precisa fechar o ')' após a expressão");
-        }else{
+        } else {
             this.token = lexico.nextToken();
             K();
         }
-        
+
     }
 
-    //expressão relacional
-    private void ER(){
+    // expressão relacional
+    private void ER() {
+
         E();
-        if(!(this.token.getTipo() == Token.TIPO_OPERADOR_RELACIONAL)){
+
+        if (!(this.token.getTipo() == Token.TIPO_OPERADOR_RELACIONAL)) {
             throw new RuntimeException("precisa inserir uma expressão relacional após o '");
-        }else{
+        } else {
             this.token = this.lexico.nextToken();
             E();
         }
     }
 
-    //expressão aritimetica
+    // expressão aritimetica
     private void E() {
         this.T();
         this.E1();
