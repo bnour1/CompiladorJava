@@ -30,12 +30,12 @@ public class Lexico {
 	}
 
 	// Retorna próximo char
-	private char nextChar() {
+	private char proxChar() {
 		return this.conteudo[this.indiceConteudo++];
 	}
 
 	// Verifica existe próximo char ou chegou ao final do código fonte
-	private boolean hasNextChar() {
+	private boolean hasproxChar() {
 		return indiceConteudo < this.conteudo.length;
 	}
 
@@ -90,14 +90,14 @@ public class Lexico {
 	}
 
 	// Método retorna próximo token válido ou retorna mensagem de erro.
-	public Token nextToken() {
+	public Token proxToken() {
 		Token token = null;
 		char c;
 		int estado = 0;
 
 		StringBuffer lexema = new StringBuffer();
-		while (this.hasNextChar()) {
-			c = this.nextChar();
+		while (this.hasproxChar()) {
+			c = this.proxChar();
 			switch (estado) {
 				case 0:
 					if (this.isCharacterSpace(c)) {
